@@ -4,6 +4,7 @@ import CustomerTable from './CustomerTable';
 import CustomerForm from './CustomerForm';
 import FilterForm from './FilterForm';
 import CustomPagination from './Pagination';
+import RouteModal from './RouteModal';
 
 const API_URL = 'http://localhost:4000/customers';
 
@@ -24,6 +25,22 @@ function App() {
     coordinate_x: '',
     coordinate_y: '',
   });
+  const [showRouteModal, setShowRouteModal] = useState(false);
+  const [optimizedRoute, setOptimizedRoute] = useState([]);
+
+  const handleRouteClick = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/optimized-route`);
+      setOptimizedRoute(response.data);
+      setShowRouteModal(true);
+    } catch (error) {
+      console.error('Error fetching optimized route:', error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowRouteModal(false);
+  };
 
   useEffect(() => {
     fetchCustomers();
@@ -150,6 +167,13 @@ function App() {
         customers={customers}
         handleEditClick={handleEditClick}
         handleDelete={handleDelete}
+        handleRouteClick={handleRouteClick}
+      />
+
+      <RouteModal
+        show={showRouteModal}
+        handleClose={handleCloseModal}
+        modalProps={{ optimizedRoute }}
       />
 
       <CustomPagination

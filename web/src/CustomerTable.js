@@ -1,9 +1,18 @@
 import React from 'react';
 
-const CustomerTable = ({ customers, handleEditClick, handleDelete }) => {
+const CustomerTable = ({ customers, handleEditClick, handleDelete, handleRouteClick }) => {
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-bold mb-2">Customer List</h2>
+      
+      <h2 className="text-xl font-bold mb-2 flex justify-between">
+        Customer List
+        <button
+          onClick={() => handleRouteClick()}
+          className="bg-green-500 font-normal text-xl text-white px-4 py-2 rounded"
+        >
+          Show Best Route
+        </button>
+      </h2>
       <table className="w-full border">
         <thead>
           <tr>
@@ -23,7 +32,7 @@ const CustomerTable = ({ customers, handleEditClick, handleDelete }) => {
               <td className="border p-2">{customer.email}</td>
               <td className="border p-2">{customer.phone}</td>
               <td className="border p-2">{customer.coordinate_x}, {customer.coordinate_y}</td>
-              <td className="border p-2 space-x-2">
+              <td className="border p-2 space-x-2 flex justify-center">
                 <button
                   onClick={() => handleEditClick(customer)}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"

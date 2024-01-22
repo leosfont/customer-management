@@ -17,8 +17,8 @@ services:
     tty: true
     restart: unless-stopped
     build:
-      context: ./api/docker/node
-      dockerfile: Dockerfile
+      context: ./api
+      dockerfile: docker/node/Dockerfile
     depends_on:
       - database
     environment:
@@ -39,8 +39,8 @@ services:
   database:
     tty: true
     build:
-      context: ./api/docker/postgres
-      dockerfile: Dockerfile
+      context: ./api
+      dockerfile: docker/postgres/Dockerfile
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -48,7 +48,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./api/docker/database/extensions.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./api/docker/postgres/extensions.sql:/docker-entrypoint-initdb.d/init.sql
       - database:/var/lib/postgresql/data
     networks:
       - customer-management
