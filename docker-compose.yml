@@ -1,0 +1,62 @@
+version: '3'
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "80:3000"
+    volumes:
+      - ./web/build:/usr/share/nginx/html
+    stdin_open: true
+    tty: true
+    env_file:
+      - ./web/.env
+
+  api:
+    tty: true
+    restart: unless-stopped
+    build:
+      context: ./api/docker/node
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: database
+    links:
+      - database
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./api:/var/www
+    networks:
+      - customer-management
+
+  database:
+    tty: true
+    build:
+      context: ./api/docker/postgres
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./api/docker/database/extensions.sql:/docker-entrypoint-initdb.d/init.sql
+      - database:/var/lib/postgresql/data
+    networks:
+      - customer-management
+
+networks:
+    customer-management:
+        name: customer-management
+        driver: bridge
+
+volumes:
+  database:
