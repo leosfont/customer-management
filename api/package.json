@@ -7,7 +7,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "start": "npm run migrate:up && npm run test && node server.js",
+    "start": "npm install pg-promise && npm run test && node server.js",
     "test": "mocha --require ./test-config.js tests/*",
     "migrate:up": "npx migrate up --migrations-dir database/migrations",
     "migrate:down": "npx migrate down --migrations-dir database/migrations/",
